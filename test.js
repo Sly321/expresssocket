@@ -4,18 +4,28 @@ const WebSocket = require('ws');
 
 const app = express();
 
+let color = "green"
+
 app.use(express.static(__dirname));
 
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
 wss.on('connection', function connection(ws, req) {
+  console.log("connection")
 
   ws.on('message', function incoming(message) {
     console.log('received: %s', message);
   });
 
-  ws.send('<script>(() => alert("/"))()</script>');
+  // console.log("wss.clients.size")
+  // console.log(wss.clients.size)
+  
+  // wss.clients.forEach(client => console.log(client))
+  setInterval(() => {
+    color = color === "green" ? "yellow" : "green"
+    ws.send(JSON.stringify({ context: "css", value: `body { background: ${color} }`}));
+  }, 1000);
 });
 
 wss.on('open', function open() {
@@ -39,13 +49,13 @@ server.listen(8080, function listening() {
   console.log('Listening on %d', server.address().port);
 });
 
-setTimeout(() => console.log(3), 1000)
-setTimeout(() => console.log(2), 2000)
-setTimeout(() => console.log(1), 3000)
-setTimeout(() => {
-  wss.clients.forEach(function each (client) {
-    if (client.readyState === WebSocket.OPEN) {
-      client.send("hello darkness my old friend")
-    }
-  })
-}, 4000)
+// setTimeout(() => console.log(3), 1000)
+// setTimeout(() => console.log(2), 2000)
+// setTimeout(() => console.log(1), 3000)
+// setTimeout(() => {
+//   wss.clients.forEach(function each (client) {
+//     if (client.readyState === WebSocket.OPEN) {
+//       client.send("hello darkness my old friend")
+//     }
+//   })
+// }, 4000)

@@ -18,8 +18,16 @@
 				// document.querySelector("body").innerHTML = e.data
 				console.log("onmessage")
 
-				if (e.data == "hello darkness my old friend") {
-					alert("fick dich du socket")
+				if (e.data == "reload") {
+					window.location = window.location
+				}
+
+				const parsed = JSON.parse(e.data)
+
+				if (parsed.context == "css") {
+					let style = document.createElement("style")
+					style.innerHTML = parsed.value
+					document.querySelector("head").append(style)
 				}
 			}
 
