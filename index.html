@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Reload Express Sample App</title>
+		<link rel="stylesheet" href="style.css">
+	</head>
+	<body>
+		Itadakimas
+		<script>
+			var connection = new WebSocket('ws://127.0.0.1:8080');
+
+			connection.onopen = () => {
+				connection.send("connection opened")
+				console.log("onopen")
+			}
+
+			connection.onmessage = function (e) {
+				// document.querySelector("body").innerHTML = e.data
+				console.log("onmessage")
+
+				if (e.data == "hello darkness my old friend") {
+					alert("fick dich du socket")
+				}
+			}
+
+			connection.onclose = function(event) {
+				console.log("onclose")
+				console.log(event)
+			}
+		</script>
+	</body>
+</html>
